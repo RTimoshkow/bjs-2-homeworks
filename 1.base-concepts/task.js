@@ -7,10 +7,6 @@ function solveEquation(a, b, c) {
 
   D = b*b-4*a*c;
 
-  if (D < 0) {
-    arr = [];
-  }
-
   if (D == 0) {
     arr.push(-b/(2*a));
   }
@@ -30,7 +26,7 @@ function calculateTotalMortgage(percent, contribution, amount, date) {
   let currentYear = currentDate.getFullYear();
   let nextYear = date.getFullYear();
 
-  let P = percent / 100 / 12; //месечный процент
+  let p = percent / 100 / 12; //месечный процент
   let n; //колличество месяцев
   let loanBody = amount - contribution; // тело кредита
   
@@ -38,22 +34,20 @@ function calculateTotalMortgage(percent, contribution, amount, date) {
   let errorMessageContribution = `Параметр "Начальный взнос" содержит неправильное значение "${contribution}"`;
   let errorMessageAmount = `Параметр "Общая стоимость" содержит неправильное значение "${amount}"`;
 
-  if (percent === undefined) {
-    return alert(errorMessagePercent);
+  if (isNaN(percent)) {
+    return errorMessagePercent;
   }
-  if (contribution === undefined) {
-    return alert (errorMessageContribution);
+  if (isNaN(contribution)) {
+    return errorMessageContribution;
   }
-  if (amount === undefined) {
-    return alert (errorMessageAmount);
+  if (isNaN(amount)) {
+    return errorMessageAmount;
   }
 
   if (currentYear < nextYear) {
     n = (12 - currentMounth) + (date.getMonth() + 1) + ((nextYear - currentYear - 1) * 12);
   }
-  let monthlyPayment = loanBody * (P + (P / (((1 + P)**n) - 1)));
+  let monthlyPayment = loanBody * (p + (p / (((1 + p)**n) - 1)));
 
-  totalAmount = (monthlyPayment * n).toFixed(2);
-
-  return (+ `${totalAmount}`);
+  return Number((monthlyPayment * n).toFixed(2));
 }
