@@ -27,9 +27,12 @@ class AlarmClock {
         }
     }
 
-    getCurrentFormattedTime() { 
-        let date = new Date();
-        return String(date.getHours()) + ":" + String(date.getMinutes());
+    getCurrentFormattedTime() {
+        return new Date().toLocaleTimeString("ru-Ru", {
+            timeZone: 'Europe/Moscow',
+            hour: "2-digit",
+            minute: "2-digit",
+            });
     }
 
     start() {
@@ -64,11 +67,15 @@ class AlarmClock {
 function testCase() {
     let alarmСlock = new AlarmClock();
     let date = new Date();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    alarmСlock.addClock(String(hours + ":" + minutes), () => console.log("Первый будильник"), 1);
-    alarmСlock.addClock(String(hours + ":" + (minutes + 1)), () => {console.log("Второй будильник"); alarmСlock.removeClock(2)}, 2);
-    alarmСlock.addClock(String(hours + ":" + (minutes + 2)), () => {
+    alarmСlock.addClock(String([date.getHours(), date.getMinutes()].map(function (x) {
+        return x < 10 ? "0" + x : x
+        }).join(":")), () => console.log("Первый будильник"), 1);
+    alarmСlock.addClock(String([date.getHours(), (date.getMinutes() + 1)].map(function (x) {
+        return x < 10 ? "0" + x : x
+      }).join(":")), () => {console.log("Второй будильник"); alarmСlock.removeClock(2)}, 2);
+    alarmСlock.addClock(String([date.getHours(), (date.getMinutes() + 2)].map(function (x) {
+        return x < 10 ? "0" + x : x
+      }).join(":")), () => {
         console.log("Третий будильник");
         alarmСlock.clearAlarms();
         alarmСlock.printAlarms()
